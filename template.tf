@@ -6,7 +6,7 @@ resource "alicloud_ess_scaling_group" "scaling-group-1" {
   max_size           = 1
   scaling_group_name = "scaling-group-1"
   default_cooldown   = 60
-  vswitch_ids        = [alicloud_vswitch.zone-1a.id, alicloud_vswitch.zone-1b.id]
+  vswitch_ids        = [alicloud_vswitch.zone1.id, alicloud_vswitch.zone2.id]
   removal_policies   = ["OldestScalingConfiguration", "OldestInstance"]
   multi_az_policy    = "BALANCE"
 }
@@ -21,12 +21,15 @@ resource "alicloud_ess_scaling_configuration" "scaling-config-1" {
   internet_charge_type       = "PayByTraffic"
   internet_max_bandwidth_in  = 1
   internet_max_bandwidth_out = 1
-  system_disk_category       = "cloud_ssd"
+  system_disk_category       = "cloud_efficiency"
   system_disk_size           = 20
   enable                     = true
   active                     = true
   user_data                  = data.template_file.user_data.rendered
   force_delete               = true
+  
+    force_delete               = true
+
 
   lifecycle {
     ignore_changes = [user_data]
