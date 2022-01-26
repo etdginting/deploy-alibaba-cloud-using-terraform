@@ -6,22 +6,22 @@ data "alicloud_zones" "default" {
 }
 
 resource "alicloud_vpc" "vpc" {
-  name       = "vpc"
-  cidr_block = "192.168.0.0/24"
+  vpc_name       = "vpc"
+  cidr_block = "192.168.0.0/16"
 }
 
-resource "alicloud_vswitch" "zone-1a" {
+resource "alicloud_vswitch" "zone1" {
   vpc_id            = alicloud_vpc.vpc.id
-  cidr_block        = "192.168.200.0/25"
-  availability_zone = data.alicloud_zones.default.zones[0].id
-  name              = "zone-1a"
+  cidr_block        = "192.168.0.0/24"
+  zone_id           = data.alicloud_zones.default.zones[0].id
+  vswitch_name      = "zone1"
 }
 
-resource "alicloud_vswitch" "zone-1b" {
+resource "alicloud_vswitch" "zone2" {
   vpc_id            = alicloud_vpc.vpc.id
-  cidr_block        = "192.168.300.0/25"
-  availability_zone = data.alicloud_zones.default.zones[1].id
-  name              = "zone-1b"
+  cidr_block        = "192.168.1.0/24"
+  zone_id           = data.alicloud_zones.default.zones[1].id
+  vswitch_name      = "zone2"
 }
 
 #--------------
@@ -38,8 +38,8 @@ resource "alicloud_security_group_rule" "security-group-1-http" {
   ip_protocol       = "tcp"
   nic_type          = "intranet"
   policy            = "accept"
-  port_range        = "80/80"
+  port_range        = "22/22"
   priority          = 1
   security_group_id = alicloud_security_group.security-group-1.id
-  cidr_ip           = "0.0.0.0/0"
+  cidr_ip           = "192.168.0.0/24"
 }
